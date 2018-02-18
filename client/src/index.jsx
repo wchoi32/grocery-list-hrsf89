@@ -1,22 +1,75 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import $ from 'jquery';
+import AddGrocery from './components/AddGrocery.jsx';
+import GroceryList from './components/GroceryList.jsx';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       list: [
-        {id: 1, quantity: 5, description: "frozen pizza"},
-        {id: 2, quantity: 10, description: "greek yogurt"},
-        {id: 3, quantity: 2, description: "wine"},
-        {id: 4, quantity: 1, description: "iced coffee"}
+        // {id: 1, quantity: 5, description: "frozen pizza"},
+        // {id: 2, quantity: 10, description: "greek yogurt"},
+        // {id: 3, quantity: 2, description: "wine"},
+        // {id: 4, quantity: 1, description: "iced coffee"}
       ]
     }
   }
 
+  componentDidMount() {
+    this.fetch();
+  }
+
+  handleEntryClick (item) {
+    console.log(item)
+    $.ajax({
+      url: '/list',
+      method: 'POST',
+      contentType: 'application/json', 
+      data: JSON.stringify(item),
+      success: (data) => {
+        console.log('sent');
+        this.fetch();
+      },
+      error: function(err) {
+        console.log('Failed to Send', err)
+      }
+    });
+  }
+
+  fetch() {
+    $.ajax({
+      url: '/list',
+      method: 'GET',
+      contentType: 'application/json',
+      success: (received) => {
+        console.log('fetching')
+        var receivedData = JSON.parse(received);
+        console.log(receivedData)
+        //received = JSON.parse(data);
+        this.setState({
+          list: receivedData
+        })
+      },
+      error: function(err) {
+        console.log('Failed to Send', err)
+      }
+    });
+  }
   
   render () {
-    return null;
+    return (
+      <div>
+        <h1>Grocery List</h1>
+        <div>
+          <AddGrocery handleEntryClick = {this.handleEntryClick.bind(this)} />
+        </div>
+        <div>
+          <GroceryList list = {this.state.list} />
+        </div>
+      </div>
+    );
   }
 }
 
