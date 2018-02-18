@@ -7,6 +7,12 @@ app.use(parser.json());
 
 app.use(express.static(__dirname + '/../client/dist'));
 
+app.post('/remove', function(req, res) {
+  //console.log(req.body);
+  db.remove(req.body);
+  res.sendStatus(200);
+});
+
 app.post('/list', function(req, res) {
   //console.log(req.body);
   db.save(req.body);

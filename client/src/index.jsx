@@ -16,6 +16,23 @@ class App extends React.Component {
     this.fetch();
   }
 
+  handleItemList (remove) {
+    console.log(remove);
+    $.ajax({
+      url: '/remove',
+      method: 'POST',
+      contentType: 'application/json', 
+      data: JSON.stringify(remove),
+      success: (remove) => {
+        console.log('sent');
+        this.fetch();
+      },
+      error: function(err) {
+        console.log('Failed to Remove', err)
+      }
+    });
+  }
+
   handleEntryClick (item) {
     console.log(item)
     $.ajax({
@@ -61,7 +78,10 @@ class App extends React.Component {
           <AddGrocery handleEntryClick = {this.handleEntryClick.bind(this)} />
         </div>
         <div>
-          <GroceryList list = {this.state.list} />
+          <GroceryList 
+            handleItemList = {this.handleItemList.bind(this)} 
+            list = {this.state.list} 
+          />
         </div>
       </div>
     );

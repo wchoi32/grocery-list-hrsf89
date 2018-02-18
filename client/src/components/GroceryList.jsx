@@ -1,10 +1,15 @@
 import React from 'react';
+import GroceryItem from './GroceryItem.jsx';
 
-const GroceryList = (props) => (
+const GroceryList = ({list, handleItemList}) => (
   <div className="groceries">
     <ul>
-      {props.list.map((grocery) => 
-        <div key = {grocery.description}> {grocery.description + ' ' + grocery.quantity}</div>
+      {list.map((grocery) => 
+        <GroceryItem 
+          key = {grocery.description}
+          grocery = {grocery} 
+          handleItemList = {handleItemList}
+        />
       )}
     </ul>
   </div>
