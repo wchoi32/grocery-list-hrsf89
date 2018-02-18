@@ -18,15 +18,49 @@ let List = mongoose.model('List', listSchema);
 let number = 1;
 
 let save = (obj) => {
-  var newList = new List ({
-    id: number++,
-    quantity: obj.quantity,
-    description: obj.description,
+  let query = {description: obj.description}
+  List
+  .find({description: obj.description})
+  .exec(function(err, found) {
+    if (err) return err;
+    if(found.length !== 0) {
+      console.log('need to update')
+      List.findOneAndUpdate(
+        query, 
+        {$inc: {quantity: obj.quantity}},
+        (err, doc) => {}
+      )
+    } else {
+      var newList = new List ({
+        id: number++,
+        quantity: obj.quantity,
+        description: obj.description,
+      });
+
+      newList.save((newList, err) => {
+        if (err) return err;
+      });
+    }
   });
 
-  newList.save((newList, err) => {
-    if (err) return err;
-  });
+  // if(!(List.find({description: obj.description}))) {
+  //   console.log('inserting')
+  //   var newList = new List ({
+  //     id: number++,
+  //     quantity: obj.quantity,
+  //     description: obj.description,
+  //   });
+
+  //   newList.save((newList, err) => {
+  //     if (err) return err;
+  //   });
+  // } else {
+  //   console.log('updating');
+  //   List.findOneAndUpdate(
+  //     {description: obj.description}, 
+  //     {$set: {quantity: obj.quantity}}
+  //   )
+  // }
 }
 
 let retrieve = (callback) => {

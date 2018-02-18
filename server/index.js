@@ -14,11 +14,6 @@ app.post('/list', function(req, res) {
 });
 
 app.get('/list', function(req, res) {
-  //console.log('getting', req, res)
-  // db.retrieve((data) => {
-  //   //console.log(data)
-  //   res.send(JSON.stringify(data))
-  // });
   db.retrieve((data) => {
     // console.log(JSON.stringify(data))
     res.send(200, JSON.stringify(data));
